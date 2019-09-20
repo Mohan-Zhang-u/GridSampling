@@ -33,7 +33,11 @@ def constraint_satisfaction(functions, point):
 def bisection_2d(functions, start, end, bisection_interval):
     """
     start * end <=0, but at most one of start or end == 0.
-
+    :param functions:
+    :param start:
+    :param end:
+    :param bisection_interval:
+    :return: a (,) point
     """
     if constraint_satisfaction(functions, start)[0] == 0:
         return start
@@ -55,8 +59,10 @@ def bisection_2d(functions, start, end, bisection_interval):
                 return bisection_2d(functions, tuple((n_start + n_end) / 2), end, bisection_interval)
 
 
-def determine_pattern(vertices_coordinate, vertices_result, bisection_interval, intersection_points, edge_lines):
+def determine_pattern(functions, vertices_coordinate, vertices_result, bisection_interval, intersection_points,
+                      edge_lines):
     """
+    our final goal is edge_lines.append([(),()])
 
     :param vertices_coordinate: ((0,0), (0,1), (1,0), (1,1))
     :param vertices_result: (float, float, float, float)
@@ -65,7 +71,63 @@ def determine_pattern(vertices_coordinate, vertices_result, bisection_interval, 
     :param edge_lines:
     :return:
     """
-    if
+    n_vertices_result = np.array(vertices_result)
+    if np.prod(n_vertices_result) == 0.0:  # vertices on the graph edge.
+        if vertices_result[0] == 0 and vertices_result[1] == 0:
+            edge_lines.append([vertices_coordinate[0], vertices_coordinate[1]])
+        elif vertices_result[0] == 0 and vertices_result[2] == 0:
+            edge_lines.append([vertices_coordinate[0], vertices_coordinate[2]])
+        elif vertices_result[1] == 0 and vertices_result[3] == 0:
+            edge_lines.append([vertices_coordinate[1], vertices_coordinate[3]])
+        elif vertices_result[2] == 0 and vertices_result[3] == 0:
+            edge_lines.append([vertices_coordinate[2], vertices_coordinate[3]])
+    # exactly one vertex or three vertices inside the shape
+    elif (vertices_result[0] < 0 and vertices_result[1] < 0 and vertices_result[2] < 0 and vertices_result[3] < 0) or (
+            vertices_result[0] > 0 and vertices_result[1] > 0 and vertices_result[2] > 0 and vertices_result[3] > 0):
+        return
+    elif (vertices_result[0] > 0 and vertices_result[1] < 0 and vertices_result[2] < 0 and vertices_result[3] < 0) or (
+            vertices_result[0] < 0 and vertices_result[1] > 0 and vertices_result[2] > 0 and vertices_result[3] > 0):
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[1], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[2], bisection_interval)))
+        return
+    elif (vertices_result[0] < 0 and vertices_result[1] > 0 and vertices_result[2] < 0 and vertices_result[3] < 0) or (
+            vertices_result[0] > 0 and vertices_result[1] < 0 and vertices_result[2] > 0 and vertices_result[3] > 0):
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[1], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[1], vertices_coordinate[3], bisection_interval)))
+        return
+    elif (vertices_result[0] < 0 and vertices_result[1] < 0 and vertices_result[2] > 0 and vertices_result[3] < 0) or (
+            vertices_result[0] > 0 and vertices_result[1] > 0 and vertices_result[2] < 0 and vertices_result[3] > 0):
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[2], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[2], vertices_coordinate[3], bisection_interval)))
+        return
+    elif (vertices_result[0] < 0 and vertices_result[1] < 0 and vertices_result[2] < 0 and vertices_result[3] > 0) or (
+            vertices_result[0] > 0 and vertices_result[1] > 0 and vertices_result[2] > 0 and vertices_result[3] < 0):
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[2], vertices_coordinate[3], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[1], vertices_coordinate[3], bisection_interval)))
+        return
+    # exactly two vertices inside the shape
+    elif (vertices_result[0] > 0 and vertices_result[1] > 0 and vertices_result[2] < 0 and vertices_result[3] < 0) or (
+            vertices_result[0] < 0 and vertices_result[1] < 0 and vertices_result[2] > 0 and vertices_result[3] > 0):
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[2], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[1], vertices_coordinate[3], bisection_interval)))
+        return
+    elif (vertices_result[0] > 0 and vertices_result[1] < 0 and vertices_result[2] > 0 and vertices_result[3] < 0) or (
+            vertices_result[0] < 0 and vertices_result[1] > 0 and vertices_result[2] < 0 and vertices_result[3] > 0):
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[1], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[2], vertices_coordinate[3], bisection_interval)))
+        return
+    elif vertices_result[0] > 0 and vertices_result[1] < 0 and vertices_result[2] < 0 and vertices_result[3] > 0:
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[1], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[2], bisection_interval)))
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[1], vertices_coordinate[3], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[2], vertices_coordinate[3], bisection_interval)))
+        return
+    elif vertices_result[0] < 0 and vertices_result[1] > 0 and vertices_result[2] > 0 and vertices_result[3] < 0:
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[1], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[1], vertices_coordinate[3], bisection_interval)))
+        edge_lines.append((bisection_2d(functions, vertices_coordinate[0], vertices_coordinate[2], bisection_interval),
+                           bisection_2d(functions, vertices_coordinate[2], vertices_coordinate[3], bisection_interval)))
+        return
 
 
 def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, grid_density_y,
@@ -82,7 +144,8 @@ def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, 
                                constraint_satisfaction(functions, bot_right)[0],
                                constraint_satisfaction(functions, top_left)[0],
                                constraint_satisfaction(functions, top_right)[0]]
-            determine_pattern((bot_left, bot_right, top_left, top_right), vertices_result, bisection_interval,
+            determine_pattern(functions, (bot_left, bot_right, top_left, top_right), vertices_result,
+                              bisection_interval,
                               intersection_points, edge_lines)
 
             y += grid_density_y
