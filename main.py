@@ -12,6 +12,7 @@ functions = \
 grid_density_x = grid_density_y = 0.001
 origin_x = origin_y = 0
 stopping_x = stopping_y = 10
+bisection_interval = (grid_density_x + grid_density_y) / 2 / 1000
 
 
 def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, grid_density_y, intersection_points,
@@ -24,12 +25,11 @@ def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, 
             bot_right = (x + grid_density_x, y)
             top_left = (x, y + grid_density_y)
             top_right = (x + grid_density_x, y + grid_density_y)
-            vertices_result = [constraint_satisfaction(functions, bot_left[0], bot_left[1]),
-                               constraint_satisfaction(functions, bot_right[0], bot_right[1]),
-                               constraint_satisfaction(functions, top_left[0], top_left[1]),
-                               constraint_satisfaction(functions, top_right[0], top_right[1])]
+            vertices_result = [constraint_satisfaction(functions, bot_left)[0],
+                               constraint_satisfaction(functions, bot_right)[0],
+                               constraint_satisfaction(functions, top_left)[0],
+                               constraint_satisfaction(functions, top_right)[0]]
             determ_patern((bot_left, bot_right, top_left, top_right), vertices_result, intersection_points, edge_lines)
 
             y += grid_density_y
         x += grid_density_x
-
