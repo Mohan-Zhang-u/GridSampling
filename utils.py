@@ -133,8 +133,9 @@ def determine_pattern(functions, vertices_coordinate, vertices_result, bisection
 def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, grid_density_y,
                     functions, bisection_interval, intersection_points, edge_lines):
     x = origin_x - stopping_x
-    y = origin_y - stopping_y
     while x < origin_x + stopping_x:
+        y = origin_y - stopping_y
+        print("now x is:",x)
         while y < origin_y + stopping_y:
             bot_left = (x, y)
             bot_right = (x + grid_density_x, y)
@@ -152,11 +153,7 @@ def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, 
         x += grid_density_x
 
 
-a = function_coverter(lambda x, y: x ** 2 + y ** 2, "<", 1)
-b = function_coverter(lambda x, y: x, ">", 0)
-c = function_coverter(lambda x, y: y, ">", 0)
-d = function_coverter(lambda x, y: np.sin(x), "<", 0)
-e = function_coverter(lambda x, y: x ** 2 + (y - x ** (2 / 3)) ** 2, "<", 1)  # heart shape
+
 
 # import sympy
 # x, y = sympy.symbols('x y')
@@ -169,7 +166,7 @@ e = function_coverter(lambda x, y: x ** 2 + (y - x ** (2 / 3)) ** 2, "<", 1)  # 
 # from matplotlib.collections import LineCollection
 # # lines = [((0, 1), (1, 1)), ((2, 2), (3, 3)), ((1.1, 2.222)), ((5.01, 5.02))]
 # # lines = np.array([[(0, 1), (1, 1)], [(2, 3), (3, 3)], [(1, 2), (1, 3)], [(1.1, 2.222)], [(5.01, 5.02)]])
-# lines = [[(5, 5), (5.01,5)], [(5.02, 6.02),(5.03, 6.02)]]
+# lines = [((5, 5), (5.01,5)), ((5.02, 6.02),(5.03, 6.02))]
 # lc = LineCollection(lines) #, linewidths=2
 # fig, ax = plt.subplots()
 # ax.add_collection(lc)
