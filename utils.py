@@ -33,6 +33,17 @@ def constraint_satisfaction(functions, x, y):
     return min(evaluations), evaluations
 
 
+def determ_patern(vertices_coordinate, vertices_result, intersection_points, edge_lines):
+    """
+
+    :param vertices_coordinate: ((0,0), (0,1), (1,0), (1,1))
+    :param vertices_result: (float, float, float, float)
+    :param intersection_points:
+    :param edge_lines:
+    :return:
+    """
+
+
 a = function_coverter(lambda x, y: x ** 2 + y ** 2, "<", 1)
 b = function_coverter(lambda x, y: x, ">", 0)
 c = function_coverter(lambda x, y: y, ">", 0)
@@ -40,9 +51,21 @@ d = function_coverter(lambda x, y: np.sin(x), "<", 0)
 e = function_coverter(lambda x, y: x ** 2 + (y - x ** (2 / 3)) ** 2, "<", 1)  # heart shape
 
 
-import sympy
-x, y = sympy.symbols('x y')
-p1 = sympy.plot_implicit(sympy.Eq(x ** 2 + (y - x ** (2 / 3)) ** 2, 1), show=False)
-p2 = sympy.plot_implicit(sympy.Eq(x ** 2 + y ** 2, 1), show=False)
-p1.extend(p2)
-p1.show()
+# import sympy
+# x, y = sympy.symbols('x y')
+# p1 = sympy.plot_implicit(sympy.Eq(x ** 2 + (y - x ** (2 / 3)) ** 2, 1), show=False)
+# p2 = sympy.plot_implicit(sympy.Eq(x ** 2 + y ** 2, 1), show=False)
+# p1.extend(p2)
+# p1.show()
+
+import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
+# lines = [((0, 1), (1, 1)), ((2, 2), (3, 3)), ((1.1, 2.222)), ((5.01, 5.02))]
+# lines = np.array([[(0, 1), (1, 1)], [(2, 3), (3, 3)], [(1, 2), (1, 3)], [(1.1, 2.222)], [(5.01, 5.02)]])
+lines = np.array([[(5, 5), (5.01,5)], [(5.02, 6.02),(5.03, 6.02)]])
+lc = LineCollection(lines) #, linewidths=2
+fig, ax = plt.subplots()
+ax.add_collection(lc)
+ax.autoscale()
+plt.show()
+# ax.margins(0.1)
