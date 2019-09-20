@@ -55,16 +55,38 @@ def bisection_2d(functions, start, end, bisection_interval):
                 return bisection_2d(functions, tuple((n_start + n_end) / 2), end, bisection_interval)
 
 
-# def determ_patern(vertices_coordinate, vertices_result, intersection_points, edge_lines):
-#     """
-#
-#     :param vertices_coordinate: ((0,0), (0,1), (1,0), (1,1))
-#     :param vertices_result: (float, float, float, float)
-#     :param intersection_points:
-#     :param edge_lines:
-#     :return:
-#     """
-#     if
+def determine_pattern(vertices_coordinate, vertices_result, bisection_interval, intersection_points, edge_lines):
+    """
+
+    :param vertices_coordinate: ((0,0), (0,1), (1,0), (1,1))
+    :param vertices_result: (float, float, float, float)
+    :param bisection_interval:
+    :param intersection_points:
+    :param edge_lines:
+    :return:
+    """
+    if
+
+
+def marching_square(origin_x, origin_y, stopping_x, stopping_y, grid_density_x, grid_density_y,
+                    functions, bisection_interval, intersection_points, edge_lines):
+    x = origin_x - stopping_x
+    y = origin_y - stopping_y
+    while x < origin_x + stopping_x:
+        while y < origin_y + stopping_y:
+            bot_left = (x, y)
+            bot_right = (x + grid_density_x, y)
+            top_left = (x, y + grid_density_y)
+            top_right = (x + grid_density_x, y + grid_density_y)
+            vertices_result = [constraint_satisfaction(functions, bot_left)[0],
+                               constraint_satisfaction(functions, bot_right)[0],
+                               constraint_satisfaction(functions, top_left)[0],
+                               constraint_satisfaction(functions, top_right)[0]]
+            determine_pattern((bot_left, bot_right, top_left, top_right), vertices_result, bisection_interval,
+                              intersection_points, edge_lines)
+
+            y += grid_density_y
+        x += grid_density_x
 
 
 a = function_coverter(lambda x, y: x ** 2 + y ** 2, "<", 1)
