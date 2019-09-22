@@ -43,8 +43,8 @@ class Ball:
         self.y = rnd.randint(0, self.height - 1)
         self.radius = rnd.randint(RADIUS_MIN, RADIUS_MAX)
 
-        self.vx = (rnd.random() * (SPEED_MAX - SPEED_MIN) + SPEED_MIN) * np.sign(rnd.random())
-        self.vy = (rnd.random() * (SPEED_MAX - SPEED_MIN) + SPEED_MIN) * np.sign(rnd.random())
+        self.vx = (rnd.random() * (SPEED_MAX - SPEED_MIN) + SPEED_MIN) * np.sign(rnd.random() - 0.5)
+        self.vy = (rnd.random() * (SPEED_MAX - SPEED_MIN) + SPEED_MIN) * np.sign(rnd.random() - 0.5)
 
     def step(self):
         """ the ball bounces back when hits the boundary """
